@@ -28,33 +28,45 @@ function ListarPeliculas(){
 function AgregarProCarro(idPelicula){
     const resultado = peliculasArray.find(pelicula => pelicula.id === idPelicula)
     if(resultado === undefined){
-        alert(nombrePelicula + " no se encuentro el id " + idPelicula + " para agregarlo al carro de compra")
+        alert("No se encuentro el id " + idPelicula + " para agregarlo al carro de compra")
     }
     else{
         carroCompra.push(resultado)
-        ListarCarro()
     }
+    if(carroCompra.length != 0){
+        ListarCarro(false)
+      }
+      else{
+          alert("Tu carro de compra se encuentra vacio")
+      }
 }
 
 function EliminarProCarro(idPelicula){
     let indice = carroCompra.findIndex(pelicula => pelicula.id === idPelicula)
-    carroCompra.splice(indice,1)
-    ListarCarro()
+    if(indice != -1){
+        carroCompra.splice(indice,1)
+    }
+    else{
+        alert("Id de pelicula no encontrado dentro del carro de compra, no se elimino ningun articulo")
+    }
+
+    
+    if(carroCompra.length != 0){
+        ListarCarro(false)
+    }
+    else{
+        alert("Tu carro de compra se encuentra vacio")
+    }
 }
 
 
 function ListarCarro(totalizar){
-    let listado = "Tu lista de compra es: \n"
-    let totalVenta = 0
-    for (let index = 0; index < carroCompra.length; index++) {
-        const element = carroCompra[index];
-        listado += "Id: " + element.id + " Nombre: " + element.nombre + " Genero: " + element.genero + " Calificacion: " + element.calificacion + " Precio: $" + element.precio + "\n" + "\n"
-        totalVenta += element.precio
-    }
+    let listado = carroCompra.reduce((acc,peli) => acc += "Id: " + peli.id + " Nombre: " + peli.nombre + " Genero: " + peli.genero + " Calificacion: " + peli.calificacion + " Precio: $" + peli.precio + "\n" + "\n", "Tu lista de compra es: \n")
+    
     if(totalizar){
+        let totalVenta = carroCompra.reduce((acc,peli) => acc += peli.precio, 0)
         listado += "\n Total a pagar : $" + totalVenta
     }
-    
     alert(listado)
 }
 
